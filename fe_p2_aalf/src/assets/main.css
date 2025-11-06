@@ -1,0 +1,51 @@
+@import './base.css';
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+  
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  /* En pantallas grandes ya no usamos un grid de dos columnas.
+     Para que el contenido de la izquierda quede arriba y el de la
+     derecha debajo, dejamos #app en flujo normal (una columna).
+     Esto apila el `header` (izquierda) sobre el `RouterView` (derecha). */
+
+  #app {
+    /* Apilamos en columna y centramos horizontalmente los hijos */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 2rem;
+  }
+
+  /* Limitar el ancho de cada sección para que no ocupen todo el ancho
+     y queden centradas; las vistas que renderiza RouterView suelen tener
+     su propio max-width, pero aplicamos una regla general a los hijos
+     directos del #app para asegurar un centrado consistente. */
+  #app > * {
+    width: 100%;
+    max-width: 1o00px;
+  }
+}

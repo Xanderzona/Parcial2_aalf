@@ -67,13 +67,13 @@ watch(
 )
 
 async function fetchNivelesAcademicos() {
-  try {
-    const response = await http.get(ENDPOINT_NIVELES)
-    nivelesAcademicos.value = response.data
-  } catch (error) {
-    console.error('Error fetching niveles académicos:', error)
-    nivelesAcademicos.value = []
-  }
+  const areaConocimientoOptions = [
+    { label: 'Derecho', value: 'DERECHO' },
+    { label: 'Ingeniería', value: 'INGENIERIA' },
+    { label: 'Economía', value: 'ECONOMIA' },
+    { label: 'Salud', value: 'SALUD' }
+  ]
+  nivelesAcademicos.value = await http.get(ENDPOINT_NIVELES).then((response) => response.data)
 }
 
 onMounted(() => {
@@ -96,7 +96,8 @@ async function handleSave() {
       duracionMeses: programa.value.duracionMeses,
       costo: programa.value.costo,
       fechaInicio: fechaInicioFormatted,
-      estado: programa.value.estado
+      estado: programa.value.estado,
+      areaConocimiento: programa.value.area_conocimiento
     }
     if (props.modoEdicion) {
       await http.patch(`${ENDPOINT}/${programa.value.id}`, body)

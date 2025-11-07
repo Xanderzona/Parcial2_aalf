@@ -7,7 +7,10 @@ import { UpdateProgramaDto } from './dto/update-programa.dto';
 
 @Injectable()
 export class ProgramasService {
-  constructor(@InjectRepository(Programa) private programasRepository: Repository<Programa>) {}
+  constructor(
+    @InjectRepository(Programa)
+    private readonly programasRepository: Repository<Programa>,
+  ) {}
 
   async create(createProgramaDto: CreateProgramaDto): Promise<Programa> {
     const existe = await this.programasRepository.findOneBy({
@@ -21,7 +24,7 @@ export class ProgramasService {
       );
     }
 
-    return this.programasRepository.save({
+    const nuevoPrograma = this.programasRepository.create({
       idNivelAcademico: createProgramaDto.idNivelAcademico,
       nombre: createProgramaDto.nombre.trim(),
       descripcion: createProgramaDto.descripcion.trim(),
@@ -30,17 +33,23 @@ export class ProgramasService {
       costo: createProgramaDto.costo,
       fechaInicio: createProgramaDto.fechaInicio,
       estado: createProgramaDto.estado,
+      areaConocimiento: createProgramaDto.areaConocimiento,
     });
+
+    return this.programasRepository.save(nuevoPrograma);
   }
 
-  async findAll(): Promise<Programa[]> {
-    return this.programasRepository.find({
-      order: {
-        nivelAcademico: {
-          nombre: 'ASC',
-        },
-      },
-    });
+  async findAll(areaConocimiento?: string): Promise<Programa[]> {
+    const query = this.programasRepository
+      .createQueryBuilder('programa')
+      .leftJoinAndSelect('programa.nivelAcademico', 'nivelAcademico')
+      .orderBy('nivelAcademico.nombre', 'ASC');
+
+    if (areaConocimiento) {
+      query.where('programa.areaConocimiento = :area', { area: areaConocimiento });
+    }
+
+    return query.getMany();
   }
 
   async findOne(id: number): Promise<Programa> {
@@ -57,7 +66,7 @@ export class ProgramasService {
     return this.programasRepository.save(programaUpdate);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Programa> {
     const programa = await this.findOne(id);
     return this.programasRepository.softRemove(programa);
   }

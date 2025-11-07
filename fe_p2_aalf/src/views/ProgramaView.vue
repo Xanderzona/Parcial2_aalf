@@ -39,6 +39,7 @@ function handleGuardar() {
     :modoEdicion="!!programaEdit"
     @guardar="handleGuardar"
     @close="handleCloseDialog"
+    <Column field="area_conocimiento" header="Área de Conocimiento" />
     />
   </div>
 </template>

@@ -21,7 +21,10 @@ export class CreateProgramaDto {
   @MaxLength(100, { message: 'El campo nombre no debe ser mayor a 100 caracteres' })
   @MinLength(4, { message: 'El campo nombre no debe ser menor a 4 caracteres' })
   readonly nombre: string;
-
+  @ApiProperty()
+  @IsString({ message: 'El campo areaConocimiento debe ser de tipo cadena' })
+  @MaxLength(10, { message: 'El campo areaConocimiento no debe ser mayor a 100 caracteres' })
+  readonly areaConocimiento: string;
   @ApiProperty()
   @IsNotEmpty({ message: 'El campo descripcion no debe ser vacío' })
   @IsString({ message: 'El campo descripcion debe ser de tipo cadena' })
@@ -47,7 +50,7 @@ export class CreateProgramaDto {
   @IsNotEmpty({ message: 'El campo fechaInicio no debe ser vacío' })
   @IsDateString({}, { message: 'El campo fechaInicio debe ser de tipo fecha' })
   readonly fechaInicio: Date;
-
+  
   @ApiProperty({ enum: ['En Planificación', 'En curso', 'Finalizado'] })
   @IsNotEmpty({ message: 'El campo estado no debe ser vacío' })
   @IsString({ message: 'El campo estado debe ser de tipo cadena' })
